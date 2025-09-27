@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DesignFlow - Get Your Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #00c896 0%, #10b981 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #00c896 0%, #10b981 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 2px;
+            width: 20%;
+            transition: width 0.3s ease;
+        }
+
+        .form-container {
+            padding: 25px 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #00c896, #10b981);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #00c896;
+            box-shadow: 0 0 0 3px rgba(0, 200, 150, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .chip {
+            padding: 8px 16px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .chip:hover {
+            background: #edf2f7;
+            transform: translateY(-1px);
+        }
+
+        .chip.active {
+            background: linear-gradient(135deg, #00c896, #10b981);
+            color: white;
+            border-color: #00c896;
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #f7fafc;
+        }
+
+        .upload-area:hover {
+            border-color: #00c896;
+            background: #f0fdf9;
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #00c896, #10b981);
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            color: #4a5568;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .range-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .range-item {
+            flex: 1;
+        }
+
+        .range-input {
+            width: 100%;
+            margin-top: 10px;
+            accent-color: #00c896;
+        }
+
+        .range-value {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #00c896;
+            margin-top: 5px;
+        }
+
+        .continue-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #00c896 0%, #10b981 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            position: sticky;
+            bottom: 20px;
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 200, 150, 0.3);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: #00c896;
+            transform: scale(1.2);
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #00c896, #10b981);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 200, 150, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .floating-action:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                border-radius: 0;
+            }
+            
+            .form-container {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DesignFlow</h1>
+            <p>Tell us about your design needs</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <div class="step-indicator">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-icon">👤</div>
+                    Contact Information
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="client-name">Full Name *</label>
+                    <input type="text" id="client-name" class="form-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="client-contact">Contact Number *</label>
+                    <input type="tel" id="client-contact" class="form-input" placeholder="+91 XXXXX XXXXX" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="project-name">Project Name</label>
+                    <input type="text" id="project-name" class="form-input" placeholder="e.g., Modern Tech Logo">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="description">Brief Description</label>
+                    <textarea id="description" class="form-textarea" placeholder="Tell us what you're looking for..."></textarea>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-icon">📋</div>
+                    Project Basics
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">What do you need designed?</label>
+                    <div class="chip-group">
+                        <div class="chip active">Logo</div>
+                        <div class="chip">Flyer</div>
+                        <div class="chip">Social Post</div>
+                        <div class="chip">Business Card</div>
+                        <div class="chip">Banner</div>
+                        <div class="chip">Brochure</div>
+                        <div class="chip">Other</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Output Format</label>
+                    <div class="chip-group">
+                        <div class="chip active">Digital/Graphic</div>
+                        <div class="chip">Print Ready</div>
+                        <div class="chip">Both</div>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-icon">🏢</div>
+                    Brand Details
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="company">Company/Brand Name</label>
+                    <input type="text" id="company" class="form-input" placeholder="Your company name">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="industry">Industry</label>
+                    <select id="industry" class="form-select">
+                        <option>Select your industry</option>
+                        <option>Technology</option>
+                        <option>Healthcare</option>
+                        <option>Finance</option>
+                        <option>Education</option>
+                        <option>Retail</option>
+                        <option>Food & Beverage</option>
+                        <option>Real Estate</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Brand Personality</label>
+                    <div class="chip-group">
+                        <div class="chip">Professional</div>
+                        <div class="chip">Playful</div>
+                        <div class="chip">Modern</div>
+                        <div class="chip">Traditional</div>
+                        <div class="chip">Bold</div>
+                        <div class="chip">Elegant</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-icon">🎨</div>
+                    Design Preferences
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Preferred Colors</label>
+                    <div class="chip-group">
+                        <div class="chip">Blue</div>
+                        <div class="chip">Red</div>
+                        <div class="chip">Green</div>
+                        <div class="chip">Purple</div>
+                        <div class="chip">Orange</div>
+                        <div class="chip">Black & White</div>
+                        <div class="chip">Open to suggestions</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Style Preference</label>
+                    <div class="chip-group">
+                        <div class="chip">Minimalist</div>
+                        <div class="chip">Vintage</div>
+                        <div class="chip">Modern</div>
+                        <div class="chip">Abstract</div>
+                        <div class="chip">Illustrative</div>
+                        <div class="chip">Typography-focused</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="dimensions">Dimensions</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="dimensions" class="form-input" placeholder="e.g., 1080x1080" style="flex: 2;">
+                        <select id="unit" class="form-select" style="flex: 1;">
+                            <option>px</option>
+                            <option>mm</option>
+                            <option>cm</option>
+                            <option>inch</option>
+                            <option>feet</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-icon">📸</div>
+                    Visual References
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Upload Inspiration Images</label>
+                    <div class="upload-area">
+                        <div class="upload-icon">📎</div>
+                        <div class="upload-text">Tap to upload</div>
+                        <div class="upload-subtext">PNG, JPG up to 10MB</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="text-content">Text Content</label>
+                    <textarea id="text-content" class="form-textarea" placeholder="Any text that should be included in the design..."></textarea>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">
+                    <div class="section-icon">⚡</div>
+                    Timeline & Budget
+                </div>
+                
+                <div class="range-group">
+                    <div class="range-item">
+                        <label class="form-label">Timeline</label>
+                        <input type="range" class="range-input" min="1" max="14" value="7">
+                        <div class="range-value">7 days</div>
+                    </div>
+                    <div class="range-item">
+                        <label class="form-label">Budget (₹)</label>
+                        <input type="range" class="range-input" min="500" max="25000" value="7500" id="budget-slider">
+                        <div class="range-value" id="budget-value">₹7,500</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">File Formats Needed</label>
+                    <div class="chip-group">
+                        <div class="chip">PNG</div>
+                        <div class="chip">JPG</div>
+                        <div class="chip">PDF</div>
+                        <div class="chip">AI/PSD</div>
+                        <div class="chip">SVG</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="continue-btn" onclick="submitForm()">Submit Design Request</button>
+        </div>
+
+        <div class="floating-action">💬</div>
+    </div>
+
+    <script>
+        // Interactive functionality
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                // For single-select groups, remove active from siblings
+                if (this.parentElement.previousElementSibling.textContent.includes('What do you need') ||
+                    this.parentElement.previousElementSibling.textContent.includes('Brand Personality')) {
+                    this.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+                }
+                this.classList.toggle('active');
+                updateProgress();
+            });
+        });
+
+        // Range slider updates
+        document.querySelectorAll('.range-input').forEach(slider => {
+            slider.addEventListener('input', function() {
+                const value = this.value;
+                const valueDisplay = this.parentElement.querySelector('.range-value');
+                
+                if (this.min == 1) { // Timeline slider
+                    valueDisplay.textContent = value + (value == 1 ? ' day' : ' days');
+                } else { // Budget slider
+                    valueDisplay.textContent = '₹' + parseInt(value).toLocaleString('en-IN');
+                }
+                updateProgress();
+            });
+        });
+
+        // Form inputs
+        document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(input => {
+            input.addEventListener('input', updateProgress);
+        });
+
+        // Upload area click
+        document.querySelector('.upload-area').addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.multiple = true;
+            input.click();
+            
+            input.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    document.querySelector('.upload-text').textContent = 
+                        this.files.length + ' file' + (this.files.length > 1 ? 's' : '') + ' selected';
+                    updateProgress();
+                }
+            });
+        });
+
+        function updateProgress() {
+            const totalFields = 12; // Updated number of important fields
+            let completed = 0;
+            
+            // Check completed fields
+            if (document.getElementById('client-name').value) completed++;
+            if (document.getElementById('client-contact').value) completed++;
+            if (document.querySelector('.chip.active')) completed++;
+            if (document.getElementById('project-name').value) completed++;
+            if (document.getElementById('description').value) completed++;
+            if (document.getElementById('company').value) completed++;
+            if (document.getElementById('industry').value !== 'Select your industry') completed++;
+            if (document.querySelectorAll('.chip.active').length > 1) completed++;
+            if (document.getElementById('dimensions').value) completed++;
+            if (document.querySelector('.upload-text').textContent.includes('selected')) completed++;
+            if (document.getElementById('text-content').value) completed++;
+            completed++; // For range sliders (always have values)
+            
+            const progress = Math.min((completed / totalFields) * 100, 100);
+            document.querySelector('.progress-fill').style.width = progress + '%';
+            
+            // Update step indicators
+            const activeSteps = Math.floor(progress / 20);
+            document.querySelectorAll('.step-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index <= activeSteps);
+            });
+        }
+
+        function submitForm() {
+            // Collect all form data
+            const formData = {
+                clientName: document.getElementById('client-name').value,
+                clientContact: document.getElementById('client-contact').value,
+                projectType: Array.from(document.querySelectorAll('.chip.active')).map(chip => chip.textContent).join(', '),
+                outputFormat: document.querySelector('.chip-group').querySelectorAll('.chip.active')[1]?.textContent || 'Digital/Graphic',
+                projectName: document.getElementById('project-name').value,
+                description: document.getElementById('description').value,
+                companyName: document.getElementById('company').value,
+                industry: document.getElementById('industry').value,
+                brandPersonality: Array.from(document.querySelectorAll('.chip.active')).filter(chip => 
+                    ['Professional', 'Playful', 'Modern', 'Traditional', 'Bold', 'Elegant'].includes(chip.textContent)
+                ).map(chip => chip.textContent).join(', '),
+                preferredColors: Array.from(document.querySelectorAll('.chip.active')).filter(chip => 
+                    ['Blue', 'Red', 'Green', 'Purple', 'Orange', 'Black & White', 'Open to suggestions'].includes(chip.textContent)
+                ).map(chip => chip.textContent).join(', '),
+                stylePreference: Array.from(document.querySelectorAll('.chip.active')).filter(chip => 
+                    ['Minimalist', 'Vintage', 'Modern', 'Abstract', 'Illustrative', 'Typography-focused'].includes(chip.textContent)
+                ).map(chip => chip.textContent).join(', '),
+                dimensions: document.getElementById('dimensions').value + ' ' + document.getElementById('unit').value,
+                textContent: document.getElementById('text-content').value,
+                timeline: document.querySelector('input[min="1"]').value + ' days',
+                budget: '₹' + parseInt(document.getElementById('budget-slider').value).toLocaleString('en-IN'),
+                fileFormats: Array.from(document.querySelectorAll('.chip.active')).filter(chip => 
+                    ['PNG', 'JPG', 'PDF', 'AI/PSD', 'SVG'].includes(chip.textContent)
+                ).map(chip => chip.textContent).join(', ')
+            };
+
+            // Create email content
+            const emailBody = `New Design Request:
+
+Client Details:
+- Name: ${formData.clientName}
+- Contact: ${formData.clientContact}
+
+Project Details:
+- Project Type: ${formData.projectType}
+- Output Format: ${formData.outputFormat}
+- Project Name: ${formData.projectName}
+- Description: ${formData.description}
+
+Brand Information:
+- Company: ${formData.companyName}
+- Industry: ${formData.industry}
+- Brand Personality: ${formData.brandPersonality}
+
+Design Preferences:
+- Preferred Colors: ${formData.preferredColors}
+- Style: ${formData.stylePreference}
+- Dimensions: ${formData.dimensions}
+- Text Content: ${formData.textContent}
+
+Project Requirements:
+- Timeline: ${formData.timeline}
+- Budget: ${formData.budget}
+- File Formats: ${formData.fileFormats}`;
+
+            // Create mailto link
+            const emailSubject = encodeURIComponent(`Design Request: ${formData.projectName || 'New Project'}`);
+            const emailBodyEncoded = encodeURIComponent(emailBody);
+            const mailtoLink = `mailto:3dsmaxautodesk@gmail.com?subject=${emailSubject}&body=${emailBodyEncoded}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+            
+            // Show success message
+            const btn = document.querySelector('.continue-btn');
+            btn.textContent = 'Email Client Opening...';
+            btn.style.background = 'linear-gradient(135deg, #48bb78, #38a169)';
+            
+            setTimeout(() => {
+                btn.textContent = 'Request Sent Successfully!';
+            }, 2000);
+        }if (document.getElementById('industry').value !== 'Select your industry') completed++;
+            if (document.querySelectorAll('.chip.active').length > 1) completed++;
+            if (document.getElementById('dimensions').value) completed++;
+            if (document.querySelector('.upload-text').textContent.includes('selected')) completed++;
+            if (document.getElementById('text-content').value) completed++;
+            completed++; // For range sliders (always have values)
+            
+            const progress = Math.min((completed / totalFields) * 100, 100);
+            document.querySelector('.progress-fill').style.width = progress + '%';
+            
+            // Update step indicators
+            const activeSteps = Math.floor(progress / 20);
+            document.querySelectorAll('.step-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index <= activeSteps);
+            });
+        }
+
+        // Floating action button
+        document.querySelector('.floating-action').addEventListener('click', function() {
+            alert('Chat support coming soon!');
+        });
+
+        // Continue button
+        document.querySelector('.continue-btn').addEventListener('click', function() {
+            this.textContent = 'Finding Perfect Designers...';
+            this.style.background = 'linear-gradient(135deg, #48bb78, #38a169)';
+            
+            setTimeout(() => {
+                alert('Great! We\'ll match you with 3 perfect designers within 2 hours.');
+            }, 1500);
+        });
+
+        // Initialize progress
+        updateProgress();
+    </script>
+</body>
+</html>
